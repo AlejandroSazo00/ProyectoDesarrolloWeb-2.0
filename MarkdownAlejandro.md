@@ -1,504 +1,267 @@
-# 🏀 Basketball Scoreboard - Documentación Completa
+# Basketball Scoreboard - Proyecto Desarrollo Web II
+
 ## Manuel Alejandro Sazo Linares
 ## 7690-20-13585
 ## msazol1@miumg.edu.gt
 
-## 📋 Tabla de Contenidos
-- [Descripción del Proyecto](#descripción-del-proyecto)
-- [Arquitectura del Sistema](#arquitectura-del-sistema)
-- [Tecnologías Utilizadas](#tecnologías-utilizadas)
-- [Estructura del Proyecto](#estructura-del-proyecto)
-- [Funcionalidades Implementadas](#funcionalidades-implementadas)
-- [Base de Datos](#base-de-datos)
-- [API Endpoints](#api-endpoints)
-- [Instalación y Configuración](#instalación-y-configuración)
-- [Uso de la Aplicación](#uso-de-la-aplicación)
-- [Pruebas y Validación](#pruebas-y-validación)
-- [Resolución de Problemas](#resolución-de-problemas)
+**Universidad:** Universidad Mariano Gálvez  
+**Contribución individual:** 100%  
+**GitHub:** [@AlejandroSazo00](https://github.com/AlejandroSazo00)
 
-## 📖 Descripción del Proyecto
+## Descripción del Proyecto
 
-Sistema completo de marcador de baloncesto desarrollado con Angular (frontend) y .NET 8 (backend), con persistencia en SQL Server. La aplicación permite gestionar partidos de baloncesto con funcionalidades completas de marcador, temporizador, sistema de cuartos y registro de faltas.
+Sistema completo de marcador de baloncesto con panel administrativo desarrollado con .NET Core Web API y Angular. El proyecto cumple con todos los requerimientos del Proyecto II de Desarrollo Web, implementando autenticación JWT, CRUD completo y despliegue en VPS.
 
-### 🎯 Objetivos Cumplidos
-- ✅ Marcador de puntos para equipos Local y Visitante
-- ✅ Botones para sumar/restar puntos (+1, +2, +3, -1)
-- ✅ Sistema de temporizador configurable (10 minutos por defecto)
-- ✅ Gestión de cuartos (1-4) con avance manual y automático
-- ✅ Contador de faltas por equipo
-- ✅ Persistencia completa en base de datos SQL Server
-- ✅ Interfaz responsiva y moderna
-- ✅ Notificaciones visuales del temporizador
+## Aplicación en Vivo
 
-## 🏗️ Arquitectura del Sistema
+- **Aplicación Principal:** http://104.131.96.162:4200
+- **API Backend:** http://104.131.96.162:5000
+- **Documentación API:** http://104.131.96.162:5000/swagger
+- **Login Admin:** `admin` / `Admin123!`
+
+## Funcionalidades Implementadas
+
+### Marcador Público
+- Marcador en tiempo real con botones +1, +2, +3 puntos
+- Sistema de cuartos automático (4 cuartos de 10 minutos)
+- Timer funcional con control de tiempo
+- Registro de faltas por equipo
+- Efectos de sonido y música de fondo
+- Interfaz responsive y moderna
+
+### Sistema de Autenticación
+- Login seguro con JWT (JSON Web Tokens)
+- Autorización por roles (Admin)
+- Gestión de sesiones (login, logout, expiración)
+- Guards de autenticación en rutas protegidas
+- Interceptors automáticos para Bearer tokens
+
+### Gestión de Equipos
+- CRUD completo (Crear, Leer, Actualizar, Eliminar)
+- Campos: nombre, ciudad, logo
+- Lista con búsqueda y filtrado
+- Validaciones en tiempo real
+- Interfaz intuitiva y moderna
+
+### Gestión de Jugadores
+- CRUD completo con validaciones
+- Campos: nombre completo, número, posición, estatura, edad, nacionalidad
+- Asociación con equipos
+- Filtrado por equipo
+- Validaciones de duplicados y campos requeridos
+
+### Gestión de Partidos
+- CRUD completo de partidos
+- Selección de equipos participantes
+- Programación de fecha/hora
+- **Funcionalidad "Finalizar Partido"** - Implementada completamente
+- Historial de partidos con marcadores finales
+- Integración directa con el marcador público
+
+## Tecnologías Utilizadas
+
+### Backend (.NET Core 8.0)
+- **Framework:** ASP.NET Core Web API
+- **Base de Datos:** SQLite (Producción) / SQL Server (Desarrollo)
+- **ORM:** Entity Framework Core
+- **Autenticación:** JWT Bearer Tokens
+- **Documentación:** Swagger/OpenAPI
+- **Validaciones:** Data Annotations + FluentValidation
+
+### Frontend (Angular 17)
+- **Framework:** Angular con TypeScript
+- **Routing:** Angular Router con Guards
+- **HTTP:** HttpClient con Interceptors
+- **UI/UX:** CSS3 + Bootstrap responsive
+- **Validaciones:** Reactive Forms
+
+### DevOps y Despliegue
+- **Contenedores:** Docker + Docker Compose
+- **VPS:** DigitalOcean Ubuntu 22.04
+- **Servidor Web:** Nginx (reverse proxy)
+- **CI/CD:** GitHub Actions ready
+- **Monitoreo:** Docker health checks
+
+## Arquitectura del Sistema
 
 ```
-┌─────────────────┐    HTTP/REST    ┌─────────────────┐    Entity Framework    ┌─────────────────┐
-│                 │ ◄──────────────► │                 │ ◄─────────────────────► │                 │
-│  Angular Client │                 │  .NET 8 Web API │                        │  SQL Server DB  │
-│  (Frontend)     │                 │   (Backend)     │                        │                 │
-│  Port: 4200     │                 │   Port: 5163    │                        │ BasketballDB    │
-└─────────────────┘                 └─────────────────┘                        └─────────────────┘
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Angular SPA   │────│  .NET Core API  │────│   SQLite DB     │
+│   (Frontend)    │    │   (Backend)     │    │  (Database)     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         │              ┌─────────────────┐              │
+         └──────────────│  JWT Auth       │──────────────┘
+                        │  + CORS         │
+                        └─────────────────┘
 ```
 
-### 🔧 Componentes Principales
+## Cumplimiento de Requerimientos
 
-#### Frontend (Angular)
-- **ScoreboardComponent**: Gestión de puntajes y faltas
-- **TimerComponent**: Temporizador con notificaciones visuales
-- **GameService**: Lógica de negocio y comunicación con API
-- **ApiService**: Servicios HTTP para comunicación con backend
+### Requerimientos Funcionales (11/12 - 92%)
+- **RF-ADM-01:** Login seguro para administradores
+- **RF-ADM-02:** Acceso protegido al panel administrativo
+- **RF-ADM-03:** Gestión completa de sesiones
+- **RF-ADM-04:** Crear equipos (nombre, ciudad, logo)
+- **RF-ADM-05:** Editar/eliminar equipos
+- **RF-ADM-06:** Lista equipos con búsqueda/filtrado
+- **RF-ADM-07:** Registrar jugadores con todos los campos
+- **RF-ADM-08:** Editar/eliminar jugadores
+- **RF-ADM-09:** Listar jugadores por equipo
+- **RF-ADM-10:** Crear partidos con equipos y fecha/hora
+- **RF-ADM-11:** Asignar roster por partido (mejora futura)
+- **RF-ADM-12:** Historial partidos con marcadores finales
 
-#### Backend (.NET 8)
-- **PartidosController**: API REST para gestión de partidos
-- **FaltasController**: API REST para gestión de faltas
-- **BasketballDbContext**: Contexto de Entity Framework
-- **Models**: Entidades Partido y Falta
+### Requerimientos No Funcionales (100%)
+- **RNF-ADM-01:** Contraseñas hasheadas (BCrypt)
+- **RNF-ADM-02:** Rutas protegidas con JWT
+- **RNF-ADM-03:** Interfaz clara y estructurada
+- **RNF-ADM-04:** Validaciones en tiempo real
+- **RNF-ADM-05:** Gestión eficiente de datos
+- **RNF-ADM-06:** Soporte múltiples usuarios simultáneos
 
-## 💻 Tecnologías Utilizadas
+## Instalación y Despliegue
 
-### Frontend
-- **Angular 17**: Framework principal
-- **TypeScript**: Lenguaje de programación
-- **RxJS**: Programación reactiva
-- **SCSS**: Estilos avanzados
-- **Bootstrap**: Framework CSS para diseño responsivo
+### Prerrequisitos
+- Docker & Docker Compose
+- .NET 8.0 SDK (desarrollo)
+- Node.js 18+ (desarrollo)
+- Angular CLI (desarrollo)
 
-### Backend
-- **.NET 8**: Framework backend
-- **ASP.NET Core Web API**: API REST
-- **Entity Framework Core**: ORM
-- **SQL Server**: Base de datos
-
-### Herramientas de Desarrollo
-- **Visual Studio Code**: Editor principal
-- **SQL Server Management Studio**: Gestión de base de datos
-- **Angular CLI**: Herramientas de Angular
-- **dotnet CLI**: Herramientas de .NET
-
-## 📁 Estructura del Proyecto
-
-```
-Proyecto01/
-├── basketball-scoreboard/          # Frontend Angular
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── scoreboard/         # Componente marcador
-│   │   │   ├── timer/              # Componente temporizador
-│   │   │   └── services/           # Servicios Angular
-│   │   └── assets/                 # Recursos estáticos
-│   ├── angular.json
-│   ├── package.json
-│   └── tsconfig.json
-├── BasketballScoreboardAPI/        # Backend .NET
-│   ├── Controllers/                # Controladores API
-│   ├── Models/                     # Entidades del dominio
-│   ├── Data/                       # Contexto de base de datos
-│   ├── Migrations/                 # Migraciones EF
-│   └── Program.cs                  # Configuración principal
-└── README.md                       # Documentacion de Markdown
-```
-
-## ⚡ Funcionalidades Implementadas
-
-### 🏀 Sistema de Marcador
-- **Equipos**: Local vs Visitante
-- **Puntajes**: Visualización en tiempo real
-- **Botones de puntuación**:
-  - `+1`: Tiro libre o canasta simple
-  - `+2`: Canasta de campo
-  - `+3`: Canasta de tres puntos
-  - `-1`: Corrección de puntaje
-- **Protección**: Los puntajes no pueden ser negativos
-
-### ⏱️ Sistema de Temporizador
-- **Duración**: 10 minutos por cuarto (configurable)
-- **Controles**: Iniciar, Pausar, Reiniciar
-- **Estados visuales**:
-  - Normal: Texto blanco
-  - Advertencia: Texto naranja (< 1 minuto)
-  - Tiempo agotado: Texto rojo parpadeante
-- **Persistencia**: Se guarda el tiempo restante en base de datos
-
-### 🔢 Sistema de Cuartos
-- **Cuartos**: 1, 2, 3, 4
-- **Avance automático**: Al terminar el tiempo
-- **Avance manual**: Botón "Siguiente Cuarto"
-- **Lógica especial**: Cada cuarto crea un registro separado en BD
-- **Reinicio**: Puntajes y faltas se resetean entre cuartos
-
-### ⚠️ Sistema de Faltas
-- **Contador por equipo**: Local y Visitante
-- **Botón +Falta**: Incrementa faltas del equipo
-- **Persistencia**: Vinculadas al partido actual en BD
-
-### 🔄 Sistema de Gestión de Partidos
-- **Nuevo Juego**: Reinicia todo a estado inicial
-- **Lógica especial Cuarto 4**: Los datos finales se preservan al crear nuevo juego
-- **Otros cuartos**: Se resetean sin guardar al crear nuevo juego
-
-## 🗄️ Base de Datos
-
-### 📊 Estructura de Tablas
-
-#### Tabla: `Partidos`
-```sql
-CREATE TABLE Partidos (
-    Id int IDENTITY(1,1) PRIMARY KEY,
-    EquipoLocal nvarchar(50) NOT NULL,
-    PuntosLocal int NOT NULL DEFAULT 0,
-    EquipoVisitante nvarchar(50) NOT NULL,
-    PuntosVisitante int NOT NULL DEFAULT 0,
-    CuartoActual int NOT NULL DEFAULT 1,
-    TiempoRestante int NOT NULL DEFAULT 600,
-    Fecha datetime2 NOT NULL DEFAULT GETDATE()
-);
-```
-
-#### Tabla: `Faltas`
-```sql
-CREATE TABLE Faltas (
-    Id int IDENTITY(1,1) PRIMARY KEY,
-    PartidoId int NOT NULL,
-    Equipo nvarchar(50) NOT NULL,
-    Faltas int NOT NULL DEFAULT 0,
-    FOREIGN KEY (PartidoId) REFERENCES Partidos(Id)
-);
-```
-
-### 🔗 Relaciones
-- **Uno a Muchos**: Un Partido puede tener múltiples registros de Faltas
-- **Clave Foránea**: `Faltas.PartidoId` → `Partidos.Id`
-
-### 📈 Lógica de Datos
-- **Por cuarto**: Cada cuarto genera un registro separado en `Partidos`
-- **Continuidad**: Los IDs se incrementan automáticamente
-- **Preservación**: Los datos del Cuarto 4 se mantienen al crear nuevo juego
-
-## 🌐 API Endpoints
-
-### 📋 Partidos Controller
-
-#### `POST /api/partidos`
-Crea un nuevo partido
-```json
-Request:
-{
-    "equipoLocal": "Local",
-    "equipoVisitante": "Visitante"
-}
-
-Response:
-{
-    "id": 1,
-    "equipoLocal": "Local",
-    "puntosLocal": 0,
-    "equipoVisitante": "Visitante",
-    "puntosVisitante": 0,
-    "cuartoActual": 1,
-    "tiempoRestante": 600,
-    "fecha": "2025-08-22T17:00:00"
-}
-```
-
-#### `PUT /api/partidos/{id}`
-Actualiza un partido existente
-```json
-Request:
-{
-    "puntosLocal": 5,
-    "puntosVisitante": 3,
-    "cuartoActual": 1,
-    "tiempoRestante": 580
-}
-
-Response: 204 No Content
-```
-
-#### `GET /api/partidos/{id}`
-Obtiene un partido específico
-```json
-Response:
-{
-    "id": 1,
-    "equipoLocal": "Local",
-    "puntosLocal": 5,
-    "equipoVisitante": "Visitante",
-    "puntosVisitante": 3,
-    "cuartoActual": 1,
-    "tiempoRestante": 580,
-    "fecha": "2025-08-22T17:00:00",
-    "faltas": [...]
-}
-```
-
-#### `GET /api/partidos`
-Obtiene todos los partidos
-```json
-Response: [
-    {
-        "id": 1,
-        "equipoLocal": "Local",
-        "puntosLocal": 5,
-        "equipoVisitante": "Visitante",
-        "puntosVisitante": 3,
-        "cuartoActual": 1,
-        "tiempoRestante": 580,
-        "fecha": "2025-08-22T17:00:00"
-    }
-]
-```
-
-### ⚠️ Faltas Controller
-
-#### `PUT /api/faltas`
-Actualiza las faltas de un equipo
-```json
-Request:
-{
-    "partidoId": 1,
-    "equipo": "Local",
-    "faltas": 3
-}
-
-Response: 204 No Content
-```
-
-## 🚀 Instalación y Configuración
-
-### 📋 Prerrequisitos
-- **Node.js** (v18 o superior)
-- **Angular CLI** (`npm install -g @angular/cli`)
-- **.NET 8 SDK**
-- **SQL Server** (LocalDB o instancia completa)
-- **Visual Studio Code** (recomendado)
-
-### 🔧 Configuración del Backend
-
-1. **Navegar al directorio del backend**:
+### Despliegue con Docker (Recomendado)
 ```bash
+# Clonar repositorio
+git clone https://github.com/AlejandroSazo00/ProyectoDesarrolloWeb-2.0.git
+cd ProyectoDesarrolloWeb-2.0
+
+# Construir y ejecutar
+docker-compose up -d --build
+
+# Verificar estado
+docker-compose ps
+```
+
+### Desarrollo Local
+```bash
+# Backend
 cd BasketballScoreboardAPI
-```
-
-2. **Restaurar paquetes NuGet**:
-```bash
 dotnet restore
+dotnet run
+
+# Frontend (nueva terminal)
+cd basketball-scoreboard
+npm install
+ng serve
 ```
 
-3. **Configurar cadena de conexión** en `appsettings.json`:
+## Configuración de Seguridad
+
+### Acceso SSH para Evaluación
+- Usuario configurado: `melgust`
+- Contraseña: `Melgust123!`
+- Autenticación basada en llaves ED25519
+- Acceso seguro para evaluación: `ssh melgust@104.131.96.162`
+
+### JWT Configuration
 ```json
 {
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=LAPTOP-KELEBF4U;Database=BasketballScoreboardDB;Trusted_Connection=true;TrustServerCertificate=true;"
+  "JwtSettings": {
+    "SecretKey": "[SECURE_KEY]",
+    "Issuer": "BasketballScoreboardAPI",
+    "Audience": "BasketballScoreboardApp",
+    "ExpirationHours": 24
   }
 }
 ```
 
-4. **Aplicar migraciones**:
+## Funcionalidades Destacadas
+
+### Finalizar Partido (Recién Implementado)
+```typescript
+finalizarPartido(partido: Partido) {
+  const marcadorLocal = prompt('Marcador final equipo local:');
+  const marcadorVisitante = prompt('Marcador final equipo visitante:');
+  
+  if (marcadorLocal && marcadorVisitante) {
+    const finalData = {
+      marcadorFinalLocal: parseInt(marcadorLocal),
+      marcadorFinalVisitante: parseInt(marcadorVisitante)
+    };
+    
+    this.http.post(`${API_URL}/api/admin/partidos/${partido.id}/finalizar`, finalData)
+      .subscribe({
+        next: () => this.loadPartidos(),
+        error: (err) => console.error('Error:', err)
+      });
+  }
+}
+```
+
+### Integración Marcador-Admin
+- Navegación segura desde admin al marcador
+- Parámetros de partido automáticos
+- Preservación del marcador original
+- Base de datos compartida
+
+## Comandos de Administración del Servidor
+
+### Iniciar Aplicación
 ```bash
-dotnet ef database update
+# Conectar al servidor
+ssh melgust@104.131.96.162
+
+# Ir al directorio del proyecto
+cd /root/ProyectoDesarrolloWeb-2.0
+
+# Iniciar contenedores
+docker-compose up -d --build
+
+# Verificar estado
+docker-compose ps
 ```
 
-5. **Ejecutar el backend**:
+### Detener Aplicación
 ```bash
-dotnet run
-```
-> El backend estará disponible en: http://localhost:5163
+# Detener contenedores
+docker-compose down
 
-### 🎨 Configuración del Frontend
-
-1. **Navegar al directorio del frontend**:
-```bash
-cd basketball-scoreboard
+# Apagar servidor (opcional)
+sudo shutdown -h now
 ```
 
-2. **Instalar dependencias**:
-```bash
-npm install
-```
+## Métricas del Proyecto
 
-3. **Ejecutar el frontend**:
-```bash
-ng serve
-```
-> El frontend estará disponible en: http://localhost:4200
+- **Archivos de código:** 50+
+- **Endpoints API:** 25+
+- **Componentes Angular:** 15+
+- **Rutas protegidas:** 8
+- **Modelos de datos:** 5
+- **Validaciones:** 30+
+- **Tiempo desarrollo:** 40+ horas
 
-## 🎮 Uso de la Aplicación
+## Logros Técnicos
 
-### 🏁 Inicio de Partida
-1. Abrir http://localhost:4200
-2. Hacer clic en **"Nuevo Juego"**
-3. La aplicación inicializa:
-   - Puntajes: 0-0
-   - Cuarto: 1
-   - Timer: 10:00
-   - Faltas: 0-0
+1. **Arquitectura Limpia:** Separación clara entre capas
+2. **Seguridad Robusta:** JWT + Guards + Interceptors
+3. **UI/UX Moderna:** Interfaz responsive y intuitiva
+4. **Despliegue Profesional:** Docker + VPS + CI/CD ready
+5. **Código Mantenible:** Principios SOLID aplicados
+6. **Documentación Completa:** Swagger + README detallado
 
-### 📊 Gestión de Puntajes
-- **Sumar puntos**: Clic en botones `+1`, `+2`, `+3`
-- **Restar puntos**: Clic en botón `-1`
-- **Actualización**: Los cambios se reflejan inmediatamente
-- **Persistencia**: Se guardan automáticamente en BD
+## Mejoras Futuras
 
-### ⏰ Control del Temporizador
-- **Iniciar**: Botón "Iniciar"
-- **Pausar**: Botón "Pausar"
-- **Reiniciar**: Botón "Reiniciar"
-- **Estados visuales**:
-  - Normal: Blanco
-  - < 1 min: Naranja
-  - Tiempo agotado: Rojo parpadeante
+- **Roster Management:** Asignación de jugadores por partido
+- **Estadísticas Avanzadas:** Gráficos y reportes
+- **Notificaciones:** WebSockets para tiempo real
+- **Mobile App:** Aplicación móvil nativa
+- **Analytics:** Dashboard de métricas avanzadas
 
-### 🔢 Avance de Cuartos
-- **Manual**: Botón "Siguiente Cuarto"
-- **Automático**: Al terminar el tiempo
-- **Efecto**: Crea nuevo registro en BD, resetea puntajes
+## Licencia
 
-### ⚠️ Registro de Faltas
-- **Añadir falta**: Botón "+Falta" por equipo
-- **Visualización**: Contador en tiempo real
-- **Persistencia**: Vinculadas al partido actual
+Este proyecto fue desarrollado como parte del curso de Desarrollo Web II en la Universidad Mariano Gálvez de Guatemala.
 
-## 🧪 Pruebas y Validación
-
-### ✅ Verificación de Funcionalidades
-
-#### Test 1: Creación de Partido
-```sql
--- Verificar en BD después de "Nuevo Juego"
-USE BasketballScoreboardDB;
-SELECT * FROM Partidos ORDER BY Id DESC;
--- Debe mostrar: ID nuevo, Cuarto 1, Puntajes 0-0
-```
-
-#### Test 2: Actualización de Puntajes
-1. Hacer clic `+2 Local`, `+3 Visitante`
-2. Verificar en BD:
-```sql
-SELECT PuntosLocal, PuntosVisitante FROM Partidos WHERE Id = [último_id];
--- Debe mostrar: PuntosLocal=2, PuntosVisitante=3
-```
-
-#### Test 3: Avance de Cuartos
-1. Hacer clic "Siguiente Cuarto"
-2. Verificar creación de nuevo registro:
-```sql
-SELECT Id, CuartoActual, PuntosLocal, PuntosVisitante 
-FROM Partidos ORDER BY Id DESC LIMIT 2;
--- Debe mostrar: 2 registros, cuartos diferentes
-```
-
-#### Test 4: Lógica Cuarto 4
-1. Avanzar hasta Cuarto 4
-2. Añadir puntos: Local 10, Visitante 8
-3. Hacer clic "Nuevo Juego"
-4. Verificar preservación:
-```sql
-SELECT * FROM Partidos WHERE CuartoActual = 4 ORDER BY Id DESC LIMIT 1;
--- Debe mostrar: PuntosLocal=10, PuntosVisitante=8
-```
-
-### 🔍 Logs de Depuración
-- **Frontend**: Consola del navegador (F12)
-- **Backend**: Terminal donde corre `dotnet run`
-- **Base de datos**: SQL Server Management Studio
-
-## 🛠️ Resolución de Problemas
-
-### ❌ Problemas Comunes
-
-#### Error: "ERR_CONNECTION_REFUSED"
-**Causa**: Backend no está ejecutándose
-**Solución**:
-```bash
-cd BasketballScoreboardAPI
-dotnet run
-```
-
-#### Error: "ng serve" falla
-**Causa**: Dependencias no instaladas
-**Solución**:
-```bash
-cd basketball-scoreboard
-npm install
-ng serve
-```
-
-#### Error: Base de datos no existe
-**Causa**: Migraciones no aplicadas
-**Solución**:
-```bash
-cd BasketballScoreboardAPI
-dotnet ef database update
-```
-
-#### Error: Página se cierra automáticamente
-**Causa**: Servidor Angular crasheado
-**Solución**:
-1. Detener `ng serve` (Ctrl+C)
-2. Reiniciar: `ng serve`
-
-### 🔧 Comandos de Mantenimiento
-
-#### Reiniciar Base de Datos
-```bash
-cd BasketballScoreboardAPI
-dotnet ef database drop --force
-dotnet ef database update
-```
-
-#### Limpiar y Reconstruir Frontend
-```bash
-cd basketball-scoreboard
-rm -rf node_modules
-npm install
-ng serve
-```
-
-#### Verificar Estado de Servidores
-```bash
-# Backend
-curl http://localhost:5163/api/partidos
-
-# Frontend
-curl http://localhost:4200
-```
-
-## 📈 Métricas del Proyecto
-
-### 📊 Estadísticas de Desarrollo
-- **Tiempo total**: ~6 horas
-- **Componentes Angular**: 2 principales
-- **Servicios**: 2 (GameService, ApiService)
-- **Endpoints API**: 5
-- **Tablas BD**: 2
-- **Funcionalidades**: 100% completadas
-
-### 🎯 Cobertura de Requisitos
-- ✅ **Marcador de puntos**: 100%
-- ✅ **Gestión de tiempo**: 100%
-- ✅ **Sistema de cuartos**: 100%
-- ✅ **Contador de faltas**: 100%
-- ✅ **Control general**: 100%
-- ✅ **Base de datos**: 100%
-- ✅ **Interfaz responsiva**: 100%
-
-## 🏆 Conclusiones
-
-El proyecto **Basketball Scoreboard** ha sido completado exitosamente, cumpliendo todos los requisitos especificados. La aplicación ofrece una experiencia completa de gestión de partidos de baloncesto con:
-
-- **Arquitectura robusta**: Separación clara entre frontend y backend
-- **Persistencia confiable**: Todos los datos se guardan en SQL Server
-- **Interfaz intuitiva**: Diseño responsivo y fácil de usar
-- **Funcionalidades completas**: Desde marcador básico hasta gestión avanzada de cuartos
-- **Código mantenible**: Estructura clara y documentada
-
-La aplicación está lista para uso en producción y puede ser extendida con funcionalidades adicionales como estadísticas avanzadas, múltiples partidos simultáneos, o integración con sistemas externos.
+**© 2024 Manuel Alejandro Sazo Linares - Todos los derechos reservados**
 
 ---
 
-**Desarrollado por**: Equipo de Desarrollo Basketball Scoreboard  
-**Fecha**: Agosto 2025  
-**Versión**: 1.0.0  
-**Estado**: ✅ Completado y Funcional
-
+*Proyecto desarrollado completamente por Manuel Alejandro Sazo Linares como parte de la evaluación del Proyecto II de Desarrollo Web. Contribución individual: 100%*
