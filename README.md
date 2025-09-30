@@ -242,7 +242,7 @@ Universidad Mariano Gálvez de Guatemala
 
 Este proyecto fue desarrollado como parte del curso de Desarrollo Web II en la Universidad Mariano Gálvez de Guatemala.
 
-**© 2024 Alejandro Sazo - Todos los derechos reservados**
+**© 2025 Alejandro Sazo - Todos los derechos reservados**
 
 ---
 
