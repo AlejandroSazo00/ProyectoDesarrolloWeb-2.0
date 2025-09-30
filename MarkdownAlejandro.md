@@ -157,10 +157,10 @@ ng serve
 ## Configuración de Seguridad
 
 ### Acceso SSH para Evaluación
-- Usuario configurado: `melgust`
-- Contraseña: `Melgust123!`
+- Usuario principal: `root@104.131.96.162` (llave SSH)
+- Usuario para evaluación: `melgust@104.131.96.162`
+- Contraseña del evaluador: `Melgust123!`
 - Autenticación basada en llaves ED25519
-- Acceso seguro para evaluación: `ssh melgust@104.131.96.162`
 
 ### JWT Configuration
 ```json
@@ -208,7 +208,7 @@ finalizarPartido(partido: Partido) {
 ### Iniciar Aplicación
 ```bash
 # Conectar al servidor
-ssh melgust@104.131.96.162
+ssh root@104.131.96.162
 
 # Ir al directorio del proyecto
 cd /root/ProyectoDesarrolloWeb-2.0
@@ -260,7 +260,7 @@ sudo shutdown -h now
 
 Este proyecto fue desarrollado como parte del curso de Desarrollo Web II en la Universidad Mariano Gálvez de Guatemala.
 
-**© 2024 Manuel Alejandro Sazo Linares - Todos los derechos reservados**
+**© 2025 Manuel Alejandro Sazo Linares - Todos los derechos reservados**
 
 ---
 
