@@ -238,6 +238,10 @@ Universidad Mariano Gálvez de Guatemala
 - **Contacto:** msazol1@miumg.edu.gt
 - **GitHub:** [@AlejandroSazo00](https://github.com/AlejandroSazo00)
 
+- **SSH:** ssh melgust@104.131.96.162
+- **Carpeta** cd /root/ProyectoDesarrolloWeb-2.0
+- **Contraseña** Melgust123!
+
 ## Licencia
 
 Este proyecto fue desarrollado como parte del curso de Desarrollo Web II en la Universidad Mariano Gálvez de Guatemala.
